@@ -15,6 +15,10 @@ public class Parser {
         // Create Node for the <Sentence> which will be the root of the tree
         Node root = new Node("<Sentence>");
 
+        // Return an Atomic Sentence subtree if the tokens are the RHS of the production rule: 
+        // <Sentence> := <AtomicSentence> 
+        Node atomicSentenceNode = this.parseAtomicSentence();
+
         // Return the root
         return root;
     }
