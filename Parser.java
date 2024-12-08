@@ -7,7 +7,17 @@ public class Parser {
     }
 
     // Parse the tokenized sentence
-    public Node parseSentence(List <Token> tokens) {
+    public Node parseSentence(List <Token> tokens) throws ParserError {
+        // Throw error if there are connectives at the first part of the expression
+        if (this.isConnective(tokens.get(0).getValue())) {
+            throw new ParserError("The connective " + "'" + tokens.get(0).getValue() +  "'" + " is improperly placed.");
+        }
+
+        // Throw error if there are connectives at the last part of the expression
+        if (this.isConnective(tokens.get(tokens.size() - 1).getValue())) {
+            throw new ParserError("The connective " + "'" + tokens.get(tokens.size() - 1).getValue() +  "'" + " is improperly placed.");
+        }
+
         // Create Node for the <Sentence> which will be the root of the tree
         Node root = new Node("<Sentence>");
 
@@ -54,7 +64,7 @@ public class Parser {
 
     // Return a <Complex Sentence> node if the tokens matches either one of the RHS of the production rule: 
     // <Complex Sentence> := “(“ <Sentence> “)” | <Sentence> <Connective> <Sentence> | “NOT” <Sentence>
-    public Node parseComplexSentence(List <Token> tokens) {
+    public Node parseComplexSentence(List <Token> tokens) throws ParserError {
         // Create the Complex Sentence Node
         Node complexSentenceNode = new Node("<Complex Sentence>");
 
@@ -109,6 +119,9 @@ public class Parser {
             complexSentenceNode.insertChild(leftSentenceNode);
             complexSentenceNode.insertChild(connectiveNode);
             complexSentenceNode.insertChild(rightSentenceNode);
+        } else {
+            // Throw Error if expression did not match any of: “(“ <Sentence> “)” | <Sentence> <Connective> <Sentence> | “NOT” <Sentence>
+            throw new ParserError("Unrecognized or incomplete complex sentence.");
         }
 
         return complexSentenceNode;
@@ -141,7 +154,7 @@ public class Parser {
     }
 
     // Utility method to check whether the entire tokens inside an Array List are enclosed in parenthesis
-    public boolean areTokensEnclosed(List <Token> tokens) {
+    public boolean areTokensEnclosed(List <Token> tokens) throws ParserError {
         // Get the first token
         Token firstToken = tokens.get(0);
         
@@ -178,7 +191,12 @@ public class Parser {
 
                 // An expression is enclosed only if the first token is "(" and the corresponding ")" is the last token
                 if (closedParenthesisFoundAtTheEnd) {
-                    return true;
+                    // Throw error if the tokens are less than or equal to 2 because at least 3 tokens are needed to satisfy: (<Sentence>)
+                    if (tokens.size() <= 2) {
+                        throw new ParserError("A pair of parenthesis is enclosing nothing.");
+                    } else {
+                        return true;
+                    }
                 } else if (closedParenthesisFoundAtTheMiddle) {
                     return false;
                 }
@@ -186,6 +204,11 @@ public class Parser {
                 // Move to the next token
                 currentTokenIndex++;
             } 
+
+            // Throw Error if there are unclosed parenthesis
+            if (numberOfClosedParenthesisToFind != 0) {
+                throw new ParserError("There are mismatched parenthesis found in the expression.");
+            }
         } 
 
         return false;
@@ -222,7 +245,7 @@ public class Parser {
     }
 
     // Utility method to check whether the entire expression is negated
-    public boolean isEntireExpressionNegated(List <Token> tokens) {
+    public boolean isEntireExpressionNegated(List <Token> tokens) throws ParserError {
         // Get the first token 
         Token firstToken = tokens.get(0);
 

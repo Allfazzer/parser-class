@@ -14,10 +14,19 @@ public class Main {
         // Initialize a Parser
         Parser parser = new Parser();
 
-        // Parse the tokens
-        Node root = parser.parseSentence(tokens);
+        try {
+            // Parse the tokens
+            Node root;
 
-        // Print the tree
-        TreePrinter.printTree(root);
+            // Get the root of the parse tree
+            root = parser.parseSentence(tokens);
+
+            // Print the tree
+            TreePrinter.printTree(root);
+
+        } catch (ParserError e) {
+            // Print parsing related error messages
+            System.out.println(e.getMessage());
+        }
     }
 }
