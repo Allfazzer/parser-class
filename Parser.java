@@ -89,6 +89,27 @@ public class Parser {
             complexSentenceNode.insertChild(notNode);
             complexSentenceNode.insertChild(sentenceNode);
         }
+        // RHS is in the form: <Sentence><Connective><Sentence>
+        else if (this.getIndexOfMainConnective(tokens) != -1) {
+            // Get the index of the main connective
+            int indexOfMainConnective = this.getIndexOfMainConnective(tokens);
+
+            // Create the left sentence node
+            List <Token> tokensToTheLeftOfMainConnective = new ArrayList<>(tokens).subList(0, indexOfMainConnective);
+            Node leftSentenceNode = this.parseSentence(tokensToTheLeftOfMainConnective);
+
+            // Create the main connetive node
+            Node connectiveNode = this.parseConnective(tokens.get(indexOfMainConnective));
+
+            // Create the right sentence node
+            List <Token> tokensToTheRightOfMainConnective = new ArrayList<>(tokens).subList(indexOfMainConnective + 1, tokens.size());
+            Node rightSentenceNode = this.parseSentence(tokensToTheRightOfMainConnective);
+
+            // Insert the <Complex Sentence> subnodes
+            complexSentenceNode.insertChild(leftSentenceNode);
+            complexSentenceNode.insertChild(connectiveNode);
+            complexSentenceNode.insertChild(rightSentenceNode);
+        }
 
         return complexSentenceNode;
     }
