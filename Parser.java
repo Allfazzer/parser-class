@@ -84,6 +84,21 @@ public class Parser {
             complexSentenceNode.insertChild(sentenceNode);
             complexSentenceNode.insertChild(closedParenthesisNode);
         }
+        // RHS is in the form: NOT <Sentence>
+        else if (this.isEntireExpressionNegated(tokens)) {
+            // Create the NOT node
+            Node notNode = new Node("NOT");
+
+            // Remove the NOT token from the tokens array
+            consume();
+
+            // Create the <Sentence> node
+            Node sentenceNode = this.parseSentence();
+
+            // Insert the <Complex Sentence> subnodes
+            complexSentenceNode.insertChild(notNode);
+            complexSentenceNode.insertChild(sentenceNode);
+        }
 
         return complexSentenceNode;
     }
