@@ -5,17 +5,17 @@ public class Main {
         // Initialize a Scanner
         Scanner scanner =  new Scanner();
 
-        // Retrieve the tokens from the scanner
-        List <List<Token>> tokens = scanner.getTokens();
+        // Retrieve the list of token tables from the scanner
+        List <List<Token>> tokenTables = scanner.getTokens();
 
-        // Retrieve the token table of the first sentence
-        List <Token> tokensOfFirstSentence = tokens.get(1);
+        // Retrieve an arbitrary token table from the tokens
+        List <Token> tokens = tokenTables.get(1);
 
         // Initialize a Parser
         Parser parser = new Parser();
 
         // Parse the tokens
-        Node root = parser.parseSentence(tokensOfFirstSentence);
+        Node root = parser.parseSentence(tokens);
 
         // Print the tree
         TreePrinter.printTree(root);
