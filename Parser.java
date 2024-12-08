@@ -163,6 +163,27 @@ public class Parser {
         return -1;
     }
 
+    // Utility method to check whether the entire expression is negated
+    public boolean isEntireExpressionNegated(List <Token> tokens) {
+        // Get the first token 
+        Token firstToken = this.tokens.get(0);
+
+        // Ensure that the first token is a "NOT"
+        if (firstToken.getValue() == "NOT") {
+
+            // Get the tokenized subexpression without the "NOT"
+            List <Token> subexpressionWithoutNOT =  new ArrayList<>(this.tokens).subList(1, this.tokens.size());
+
+            // NOT is applied to the remaining tokens either:
+            // (1) The expression is enclosed or 
+            // (2) because the remaining subexpression is a single atomic sentence
+            if (this.areTokensEnclosed(subexpressionWithoutNOT) || subexpressionWithoutNOT.size() == 1) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     // Utility method to check whether the given string is a connective
     public boolean isConnective(String value) {
         return value == "AND" || value == "OR" || value == "IMPLIES" || value == "EQUIVALENT";
