@@ -93,6 +93,26 @@ public class Parser {
         return complexSentenceNode;
     }
     
+    // Return a Connective Node containing the token if its the RHS of the production rule: 
+    // <Connective> := “AND” | “OR” | “IMPLIES” | “EQUIVALENT”
+    public Node parseConnective(Token token) {
+        // Get the value of the token
+        String tokenValue = token.getValue();
+
+        // Ensure that the current token is a connective
+        if (this.isConnective(tokenValue)) {
+            // Create the Connective Node
+            Node connectiveNode = new Node("<Connective>");
+
+            // Create the child node of the Connective
+            Node currentNode = new Node(tokenValue);
+            connectiveNode.insertChild(currentNode);
+
+            return connectiveNode;
+        } else {
+            return null;
+        }
+    }
 
     // Utility method to  the current token and advance to the next
     private List <Token> consume(List <Token> tokens) {
