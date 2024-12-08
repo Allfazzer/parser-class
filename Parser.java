@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.List;
 
 public class Parser {
@@ -16,5 +17,10 @@ public class Parser {
 
         // Return the root
         return root;
+    }
+
+    // Utility method to  the current token and advance to the next
+    private void consume() {
+        this.tokens = new ArrayList<>(tokens).subList(1, tokens.size());
     }
 }
