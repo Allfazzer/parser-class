@@ -10,5 +10,11 @@ public class Main {
 
         // Retrieve the token table of the first sentence
         List <Token> tokensOfFirstSentence = tokens.get(1);
+
+        // Initialize a Parser
+        Parser parser = new Parser(tokensOfFirstSentence);
+
+        // Parser the tokens
+        parser.parseSentence();
     }
 }
