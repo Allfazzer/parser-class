@@ -101,6 +101,34 @@ public class Parser {
         return false;
     }
 
+    // Utility method to find the index of the main connective of the sentence
+    public int getIndexOfMainConnective() {
+        // Checker whether current token is inside a parenthesis
+        boolean isOutsideParenthesis = true;
+
+        // Find the connective that is not inside a parenthesis
+        for (int index = 0; index < tokens.size(); index++) {
+            // Get current token value
+            String currentTokenValue = tokens.get(index).getValue();
+
+            // Parenthesis encountered
+            if (currentTokenValue == "(") {
+                isOutsideParenthesis = false;
+            } 
+            // Parenthesis exited
+            else if (currentTokenValue == ")"){
+                isOutsideParenthesis = true;
+            }
+            // Tokens that are not parenthesis
+            else if (this.isConnective(currentTokenValue) && isOutsideParenthesis) {
+                return index;
+            }
+        }
+
+        // Return -1 index if no main connective is found
+        return -1;
+    }
+
     // Utility method to check whether the given string is a connective
     public boolean isConnective(String value) {
         return value == "AND" || value == "OR" || value == "IMPLIES" || value == "EQUIVALENT";
