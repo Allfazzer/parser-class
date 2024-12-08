@@ -17,4 +17,9 @@ public class Node {
     public String getValue() {
         return this.value;
     }
+
+    // Insert a child to the current node
+    public void insertChild(Node child) {
+        children.add(child);
+    }
 }
