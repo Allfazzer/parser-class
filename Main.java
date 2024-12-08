@@ -16,5 +16,8 @@ public class Main {
 
         // Parse the tokens
         Node root = parser.parseSentence(tokensOfFirstSentence);
+
+        // Print the tree
+        TreePrinter.printTree(root);
     }
 }
