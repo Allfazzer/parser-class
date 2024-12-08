@@ -12,9 +12,9 @@ public class Main {
         List <Token> tokensOfFirstSentence = tokens.get(1);
 
         // Initialize a Parser
-        Parser parser = new Parser(tokensOfFirstSentence);
+        Parser parser = new Parser();
 
         // Parse the tokens
-        parser.parseSentence();
+        parser.parseSentence(tokensOfFirstSentence);
     }
 }
