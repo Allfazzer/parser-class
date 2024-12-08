@@ -59,4 +59,45 @@ public class Parser {
     private void consume() {
         this.tokens = new ArrayList<>(tokens).subList(1, tokens.size());
     }
+
+    // Utility method to check whether the entire tokens inside an Array List are enclosed in parenthesis
+    public boolean areTokensEnclosed() {
+        // Get the first token
+        Token firstToken = tokens.get(0);
+        
+        // First token should be an open parenthesis
+        if (firstToken.getValue() == "(") {
+            // Ensure that the corresponding closed parenthesis is at the end of the tokens array
+
+            // Start with the token after the open parenthesis
+            int currentTokenIndex = 1; 
+
+            // Variable to track whether all encountered left parenthesis have their corresponding closed parenthesis
+            int numberOfClosedParenthesisToFind = 1;
+
+            // Start traversing the tokens array
+            while(currentTokenIndex != tokens.size()) {
+                // Get curent token
+                Token currentToken = tokens.get(currentTokenIndex);
+
+                // Another open parenthesis was found
+                if (currentToken.getValue() == "(") {
+                    numberOfClosedParenthesisToFind++;
+                } // An enclosing parenthesis was found
+                else if (tokens.get(currentTokenIndex).getValue() == ")") {
+                    numberOfClosedParenthesisToFind--;
+                }
+
+                // End loop if the outermost closed parenthesis is located
+                if (numberOfClosedParenthesisToFind == 0) {
+                    return true;
+                } 
+
+                // Move to the next token
+                currentTokenIndex++;
+            } 
+        } 
+
+        return false;
+    }
 }
