@@ -2,28 +2,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Parser {
-    // The tokens to be processed by the parser
-    private List <Token> tokens;
-
     // Constructor
-    public Parser(List <Token> tokens) {
-        this.tokens = tokens;
+    public Parser() {
     }
 
     // Parse the tokenized sentence
-    public Node parseSentence() {
+    public Node parseSentence(List <Token> tokens) {
         // Create Node for the <Sentence> which will be the root of the tree
         Node root = new Node("<Sentence>");
 
         // Return an Atomic Sentence subtree if the tokens are the RHS of the production rule: 
         // <Sentence> := <AtomicSentence> 
-        Node atomicSentenceNode = this.parseAtomicSentence();
+        Node atomicSentenceNode = this.parseAtomicSentence(tokens);
 
         // Try the <Complex Sentence> if no <Atomic Sentence> node was returned
         if (atomicSentenceNode == null) {
             // Return a Complex Sentence subtree if the tokens are the RHS of the production rule: 
             // <Sentence> := <Complex Sentence> 
-            Node complexSentenceNode = this.parseComplexSentence();
+            Node complexSentenceNode = this.parseComplexSentence(tokens);
             // Insert the <Complex Sentence> node into the root
             root.insertChild(complexSentenceNode);
         }   
@@ -39,7 +35,7 @@ public class Parser {
 
     // Return a Node containing the token if its the RHS of the production rule: 
     // <AtomicSentence> := “TRUE” | “FALSE” | “P” | “Q’ | “S”
-    public Node parseAtomicSentence() {
+    public Node parseAtomicSentence(List <Token> tokens) {
         // Atomic Sentence should be composed of 1 token only
         if (tokens.size() == 1) {
             // Create the Atomic Sentence Node
@@ -50,9 +46,6 @@ public class Parser {
             Node currentNode = new Node(currentTokenValue);
             atomicSentenceNode.insertChild(currentNode);
 
-            // Remove the current token from the list of Tokens
-            consume();
-
             return atomicSentenceNode;
         } else {
             return null;
@@ -61,12 +54,12 @@ public class Parser {
 
     // Return a <Complex Sentence> node if the tokens matches either one of the RHS of the production rule: 
     // <Complex Sentence> := “(“ <Sentence> “)” | <Sentence> <Connective> <Sentence> | “NOT” <Sentence>
-    public Node parseComplexSentence() {
+    public Node parseComplexSentence(List <Token> tokens) {
         // Create the Complex Sentence Node
         Node complexSentenceNode = new Node("<Complex Sentence>");
 
         // RHS is in the form “(“ <Sentence> “)”
-        if (areTokensEnclosed(this.tokens)) {
+        if (areTokensEnclosed(tokens)) {
             // Create node for the open parenthesis
             Node openParenthesisNode = new Node("(");
 
@@ -74,10 +67,10 @@ public class Parser {
             Node closedParenthesisNode = new Node(")");
             
             // Remove the open parenthesis and closed parenthesis token from the tokens array
-            this.tokens = new ArrayList<>(tokens).subList(1, tokens.size() - 1);
+            List <Token> tokensWithoutTheParenthesis = new ArrayList<>(tokens).subList(1, tokens.size() - 1);
 
             // Create node for the <Sentence>
-            Node sentenceNode = this.parseSentence();
+            Node sentenceNode = this.parseSentence(tokensWithoutTheParenthesis);
 
             // Insert the <Complex Sentence> subnodes
             complexSentenceNode.insertChild(openParenthesisNode);
@@ -89,11 +82,8 @@ public class Parser {
             // Create the NOT node
             Node notNode = new Node("NOT");
 
-            // Remove the NOT token from the tokens array
-            consume();
-
             // Create the <Sentence> node
-            Node sentenceNode = this.parseSentence();
+            Node sentenceNode = this.parseSentence(this.consume(tokens));
 
             // Insert the <Complex Sentence> subnodes
             complexSentenceNode.insertChild(notNode);
@@ -105,8 +95,8 @@ public class Parser {
     
 
     // Utility method to  the current token and advance to the next
-    private void consume() {
-        this.tokens = new ArrayList<>(tokens).subList(1, tokens.size());
+    private List <Token> consume(List <Token> tokens) {
+        return new ArrayList<>(tokens).subList(1, tokens.size());
     }
 
     // Utility method to check whether the entire tokens inside an Array List are enclosed in parenthesis
@@ -181,13 +171,13 @@ public class Parser {
     // Utility method to check whether the entire expression is negated
     public boolean isEntireExpressionNegated(List <Token> tokens) {
         // Get the first token 
-        Token firstToken = this.tokens.get(0);
+        Token firstToken = tokens.get(0);
 
         // Ensure that the first token is a "NOT"
         if (firstToken.getValue() == "NOT") {
 
             // Get the tokenized subexpression without the "NOT"
-            List <Token> subexpressionWithoutNOT =  new ArrayList<>(this.tokens).subList(1, this.tokens.size());
+            List <Token> subexpressionWithoutNOT =  new ArrayList<>(tokens).subList(1, tokens.size());
 
             // NOT is applied to the remaining tokens either:
             // (1) The expression is enclosed or 
