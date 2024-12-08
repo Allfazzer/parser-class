@@ -9,12 +9,12 @@ public class Parser {
         this.tokens = tokens;
     }
 
-    // Parse sentence
+    // Parse the tokenized sentence
     public Node parseSentence() {
         // Create Node for the <Sentence> which will be the root of the tree
         Node root = new Node("<Sentence>");
 
-        // Return the 
+        // Return the root
         return root;
     }
 }

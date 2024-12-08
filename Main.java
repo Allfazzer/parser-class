@@ -14,7 +14,7 @@ public class Main {
         // Initialize a Parser
         Parser parser = new Parser(tokensOfFirstSentence);
 
-        // Parser the tokens
+        // Parse the tokens
         parser.parseSentence();
     }
 }
