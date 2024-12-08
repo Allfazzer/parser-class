@@ -90,7 +90,7 @@ public class Parser {
             complexSentenceNode.insertChild(sentenceNode);
         }
         // RHS is in the form: <Sentence><Connective><Sentence>
-        else if (this.getIndexOfMainConnective(tokens) != -1) {
+        else if (this.getIndexOfMainConnective(tokens) != 0) {
             // Get the index of the main connective
             int indexOfMainConnective = this.getIndexOfMainConnective(tokens);
 
@@ -196,7 +196,8 @@ public class Parser {
         // Checker whether current token is inside a parenthesis
         boolean isOutsideParenthesis = true;
 
-        // Find the connective that is not inside a parenthesis
+        // Find the rightmost (to ensure left associativity) connective that is not inside a parenthesis
+        int indexOfMainConnective = 0;
         for (int index = 0; index < tokens.size(); index++) {
             // Get current token value
             String currentTokenValue = tokens.get(index).getValue();
@@ -211,12 +212,13 @@ public class Parser {
             }
             // Tokens that are not parenthesis
             else if (this.isConnective(currentTokenValue) && isOutsideParenthesis) {
-                return index;
+                // Get the right most connective to ensure left associativity
+                indexOfMainConnective = index;
             }
         }
 
-        // Return -1 index if no main connective is found
-        return -1;
+        // Return 0 index if no main connective is found
+        return indexOfMainConnective;
     }
 
     // Utility method to check whether the entire expression is negated
