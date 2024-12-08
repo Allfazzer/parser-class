@@ -100,4 +100,9 @@ public class Parser {
 
         return false;
     }
+
+    // Utility method to check whether the given string is a connective
+    public boolean isConnective(String value) {
+        return value == "AND" || value == "OR" || value == "IMPLIES" || value == "EQUIVALENT";
+    }
 }
