@@ -9,7 +9,7 @@ public class Main {
         List <List<Token>> tokenTables = scanner.getTokens();
 
         // Retrieve an arbitrary token table from the tokens
-        List <Token> tokens = tokenTables.get(1);
+        List <Token> tokens = tokenTables.get(5);
 
         // Initialize a Parser
         Parser parser = new Parser();
