@@ -127,10 +127,20 @@ public class Parser {
                     numberOfClosedParenthesisToFind--;
                 }
 
-                // End loop if the outermost closed parenthesis is located
-                if (numberOfClosedParenthesisToFind == 0) {
+                // Corresponding closed parenthesis of the first token is located at the middle of the expression
+                boolean closedParenthesisFoundAtTheMiddle = numberOfClosedParenthesisToFind == 0 && 
+                currentTokenIndex != tokens.size() - 1;
+
+                // Corresponding closed parenthesis of the first token is located at the end of the expression
+                boolean closedParenthesisFoundAtTheEnd = numberOfClosedParenthesisToFind == 0 && 
+                currentTokenIndex == tokens.size() - 1;
+
+                // An expression is enclosed only if the first token is "(" and the corresponding ")" is the last token
+                if (closedParenthesisFoundAtTheEnd) {
                     return true;
-                } 
+                } else if (closedParenthesisFoundAtTheMiddle) {
+                    return false;
+                }
 
                 // Move to the next token
                 currentTokenIndex++;
