@@ -2,10 +2,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Parser {
-    // Constructor
-    public Parser() {
-    }
-
     // Parse the tokenized sentence
     public Node parseSentence(List <Token> tokens) throws ParserError {
         // Throw error if there are connectives at the first part of the expression
