@@ -42,7 +42,7 @@ public class Parser {
             Node atomicSentenceNode = new Node("<Atomic Sentence>");
 
             // Create the child node of the Atomic Sentence
-            String currentTokenValue = tokens.getFirst().getValue();
+            String currentTokenValue = tokens.get(0).getValue();
             Node currentNode = new Node(currentTokenValue);
             atomicSentenceNode.insertChild(currentNode);
 
