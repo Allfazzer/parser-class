@@ -66,7 +66,7 @@ public class Parser {
         Node complexSentenceNode = new Node("<Complex Sentence>");
 
         // RHS is in the form “(“ <Sentence> “)”
-        if (areTokensEnclosed()) {
+        if (areTokensEnclosed(this.tokens)) {
             // Create node for the open parenthesis
             Node openParenthesisNode = new Node("(");
 
@@ -95,7 +95,7 @@ public class Parser {
     }
 
     // Utility method to check whether the entire tokens inside an Array List are enclosed in parenthesis
-    public boolean areTokensEnclosed() {
+    public boolean areTokensEnclosed(List <Token> tokens) {
         // Get the first token
         Token firstToken = tokens.get(0);
         
@@ -136,7 +136,7 @@ public class Parser {
     }
 
     // Utility method to find the index of the main connective of the sentence
-    public int getIndexOfMainConnective() {
+    public int getIndexOfMainConnective(List <Token> tokens) {
         // Checker whether current token is inside a parenthesis
         boolean isOutsideParenthesis = true;
 
