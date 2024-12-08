@@ -15,6 +15,6 @@ public class Main {
         Parser parser = new Parser();
 
         // Parse the tokens
-        parser.parseSentence(tokensOfFirstSentence);
+        Node root = parser.parseSentence(tokensOfFirstSentence);
     }
 }
