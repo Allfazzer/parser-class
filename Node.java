@@ -12,4 +12,9 @@ public class Node {
         this.value = value;
         this.children = new ArrayList<>();
     }
+
+    // get method of value
+    public String getValue() {
+        return this.value;
+    }
 }
