@@ -65,6 +65,26 @@ public class Parser {
         // Create the Complex Sentence Node
         Node complexSentenceNode = new Node("<Complex Sentence>");
 
+        // RHS is in the form “(“ <Sentence> “)”
+        if (areTokensEnclosed()) {
+            // Create node for the open parenthesis
+            Node openParenthesisNode = new Node("(");
+
+            // Create node for the closed parenthesis
+            Node closedParenthesisNode = new Node(")");
+            
+            // Remove the open parenthesis and closed parenthesis token from the tokens array
+            this.tokens = new ArrayList<>(tokens).subList(1, tokens.size() - 1);
+
+            // Create node for the <Sentence>
+            Node sentenceNode = this.parseSentence();
+
+            // Insert the <Complex Sentence> subnodes
+            complexSentenceNode.insertChild(openParenthesisNode);
+            complexSentenceNode.insertChild(sentenceNode);
+            complexSentenceNode.insertChild(closedParenthesisNode);
+        }
+
         return complexSentenceNode;
     }
     
