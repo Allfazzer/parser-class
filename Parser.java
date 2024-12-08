@@ -19,6 +19,20 @@ public class Parser {
         // <Sentence> := <AtomicSentence> 
         Node atomicSentenceNode = this.parseAtomicSentence();
 
+        // Try the <Complex Sentence> if no <Atomic Sentence> node was returned
+        if (atomicSentenceNode == null) {
+            // Return a Complex Sentence subtree if the tokens are the RHS of the production rule: 
+            // <Sentence> := <Complex Sentence> 
+            Node complexSentenceNode = this.parseComplexSentence();
+            // Insert the <Complex Sentence> node into the root
+            root.insertChild(complexSentenceNode);
+        }   
+        // An <Atomic Sentence> node was returned
+        else {
+            // Insert the <Atomic Sentence> node into the root
+            root.insertChild(atomicSentenceNode);
+        }
+
         // Return the root
         return root;
     }
