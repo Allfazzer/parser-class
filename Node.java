@@ -6,5 +6,10 @@ public class Node {
 
     // Children node of the current node
     ArrayList <Node> children;
-  
+
+    // Constructor
+    public Node(String value) {
+        this.value = value;
+        this.children = new ArrayList<>();
+    }
 }
