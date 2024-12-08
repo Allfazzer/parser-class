@@ -45,6 +45,16 @@ public class Parser {
         }
     }
 
+    // Return a <Complex Sentence> node if the tokens matches either one of the RHS of the production rule: 
+    // <Complex Sentence> := “(“ <Sentence> “)” | <Sentence> <Connective> <Sentence> | “NOT” <Sentence>
+    public Node parseComplexSentence() {
+        // Create the Complex Sentence Node
+        Node complexSentenceNode = new Node("<Complex Sentence>");
+
+        return complexSentenceNode;
+    }
+    
+
     // Utility method to  the current token and advance to the next
     private void consume() {
         this.tokens = new ArrayList<>(tokens).subList(1, tokens.size());
