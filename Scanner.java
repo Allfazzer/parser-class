@@ -1,87 +1,66 @@
-import java.util.List;
+import java.util.*;
+import java.util.regex.*;
 
 public class Scanner {
-    // Tokens as an array of arrays (each array represents a logical expression)
-    private final List<List<Token>> tokens = List.of(
-        // P
-        List.of(
-            new Token("identifier", "P")
-        ),
-        
-        // Q
-        List.of(
-            new Token("identifier", "Q")
-        ),
+    private String input;
+    private List<Token> tokens;
 
-         // ~P (NOT P)
-         List.of(
-            new Token("keyword", "NOT"),
-            new Token("identifier", "P")
-        ),
-        
-        // ~Q (NOT Q)
-        List.of(
-            new Token("keyword", "NOT"),
-            new Token("identifier", "Q")
-        ),
-        
-        // P ∨ Q (OR)
-        List.of(
-            new Token("identifier", "P"),
-            new Token("operator", "OR"),
-            new Token("identifier", "Q")
-        ),
-        
-        // P ∧ Q (AND)
-        List.of(
-            new Token("identifier", "P"),
-            new Token("operator", "AND"),
-            new Token("identifier", "Q")
-        ),
-        
-        // P ⇒ Q (IMPLIES)
-        List.of(
-            new Token("identifier", "P"),
-            new Token("operator", "IMPLIES"),
-            new Token("identifier", "Q")
-        ),
-        
-        // P ⇔ Q (EQUIVALENT)
-        List.of(
-            new Token("identifier", "P"),
-            new Token("operator", "EQUIVALENT"),
-            new Token("identifier", "Q")
-        ),
-        
-        // (P ∨ Q) ∧ ~Q (OR, AND, NOT)
-        List.of(
-            new Token("open_parenthesis", "("),
-            new Token("identifier", "P"),
-            new Token("operator", "OR"),
-            new Token("identifier", "Q"),
-            new Token("close_parenthesis", ")"),
-            new Token("operator", "AND"),
-            new Token("keyword", "NOT"),
-            new Token("identifier", "Q")
-        ),
-        
-        // (P ∨ Q) ∧ ~Q ⇒ S (OR, AND, NOT, IMPLIES)
-        List.of(
-            new Token("open_parenthesis", "("),
-            new Token("identifier", "P"),
-            new Token("operator", "OR"),
-            new Token("identifier", "Q"),
-            new Token("close_parenthesis", ")"),
-            new Token("operator", "AND"),
-            new Token("keyword", "NOT"),
-            new Token("identifier", "Q"),
-            new Token("operator", "IMPLIES"),
-            new Token("identifier", "S")
-        )
-    );
+    public Scanner(String input) {
+        this.input = input;
+        this.tokens = new ArrayList<>();
+    }
 
-    // Method to get the tokens
-    public List<List<Token>> getTokens() {
+    public List<Token> tokenize() {
+        String tokenSpec =
+                "(?<IDENTIFIER>[pPqQsS])|" +					//Variables P, Q, and S
+                "(?<AND>and|AND|&&)|" +							//AND Operator
+                "(?<OR>or|OR|\\|\\|)|" +						//OR Operator
+                "(?<NOT>not|NOT|!)|" +							//NOT Operator
+                "(?<IMPLIES>implies|IMPLIES|->)|" +				//IMPLIES Operator
+                "(?<EQUIVALENT>equivalent|EQUIVALENT|<->)|" +	//EQUIVALENT Operator
+                "(?<LPAREN>\\()|" +								//Left Parenthesis
+                "(?<RPAREN>\\))|" +								//Right Parenthesis
+                "(?<WHITESPACE>[ \\t]+)";						//Whitespace
+
+        //Compile regular expression and match input
+        Pattern pattern = Pattern.compile(tokenSpec, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(input);
+
+        int lastMatchEnd = 0;
+
+        while (matcher.find()) {
+            //Detect invalid tokens
+            if (matcher.start() != lastMatchEnd) {
+                throw new IllegalArgumentException("Invalid input. Only P, Q, S, and logical operators (AND, OR, NOT, IMPLIES, EQUIVALENT) are allowed.");
+            }
+            lastMatchEnd = matcher.end();
+
+            //Skip whitespace
+            if (matcher.group("WHITESPACE") != null) {
+                continue;
+            }
+
+            //Initialize type and value of the token
+            String type = null;
+            String value = null;
+
+            //Check for matching token type
+            for (String groupName : new String[] {"IDENTIFIER", "AND", "OR", "NOT", "IMPLIES", "EQUIVALENT", "LPAREN", "RPAREN"}) {
+                if (matcher.group(groupName) != null) {
+                    type = groupName;
+                    value = matcher.group(groupName);
+                    break;
+                }
+            }
+
+            tokens.add(new Token(type, value));
+        }
+
+        //Checks if entire input was matched
+        if (lastMatchEnd != input.length()) {
+            throw new IllegalArgumentException("Invalid input. Only P, Q, S, and logical operators (AND, OR, NOT, IMPLIES, EQUIVALENT) are allowed.");
+        }
+
         return tokens;
     }
 }
