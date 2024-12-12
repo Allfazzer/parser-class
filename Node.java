@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.List;
 
 public class Node {
     // Value of the current node
@@ -21,5 +22,10 @@ public class Node {
     // Insert a child to the current node
     public void insertChild(Node child) {
         children.add(child);
+    }
+
+    // Getter method for the children of the node
+    public ArrayList<Node> getChildren() {
+        return this.children;
     }
 }
