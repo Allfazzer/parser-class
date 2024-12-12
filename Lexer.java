@@ -1,11 +1,11 @@
 import java.util.*;
 import java.util.regex.*;
 
-public class Scanner {
+public class Lexer {
     private String input;
     private List<Token> tokens;
 
-    public Scanner(String input) {
+    public Lexer (String input) {
         this.input = input;
         this.tokens = new ArrayList<>();
     }
