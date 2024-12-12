@@ -155,7 +155,7 @@ public class Parser {
         Token firstToken = tokens.get(0);
         
         // First token should be an open parenthesis
-        if (firstToken.getValue() == "(") {
+        if (firstToken.getValue().equals("(")) {
             // Ensure that the corresponding closed parenthesis is at the end of the tokens array
 
             // Start with the token after the open parenthesis
@@ -170,10 +170,10 @@ public class Parser {
                 Token currentToken = tokens.get(currentTokenIndex);
 
                 // Another open parenthesis was found
-                if (currentToken.getValue() == "(") {
+                if (currentToken.getValue().equals("(")) {
                     numberOfClosedParenthesisToFind++;
                 } // An enclosing parenthesis was found
-                else if (tokens.get(currentTokenIndex).getValue() == ")") {
+                else if (tokens.get(currentTokenIndex).getValue().equals(")")) {
                     numberOfClosedParenthesisToFind--;
                 }
 
@@ -222,11 +222,11 @@ public class Parser {
             String currentTokenValue = tokens.get(index).getValue();
 
             // Parenthesis encountered
-            if (currentTokenValue == "(") {
+            if (currentTokenValue.equals("(")) {
                 isOutsideParenthesis = false;
             } 
             // Parenthesis exited
-            else if (currentTokenValue == ")"){
+            else if (currentTokenValue.equals(")")){
                 isOutsideParenthesis = true;
             }
             // Tokens that are not parenthesis
@@ -246,7 +246,7 @@ public class Parser {
         Token firstToken = tokens.get(0);
 
         // Ensure that the first token is a "NOT"
-        if (firstToken.getValue() == "NOT") {
+        if (firstToken.getValue().equals("NOT") ) {
 
             // Get the tokenized subexpression without the "NOT"
             List <Token> subexpressionWithoutNOT =  new ArrayList<>(tokens).subList(1, tokens.size());
@@ -263,6 +263,6 @@ public class Parser {
 
     // Utility method to check whether the given string is a connective
     public boolean isConnective(String value) {
-        return value == "AND" || value == "OR" || value == "IMPLIES" || value == "EQUIVALENT";
+        return value.equals("AND")  || value.equals("OR")  || value.equals("IMPLIES") || value.equals("EQUIVALENT");
     }
 }
